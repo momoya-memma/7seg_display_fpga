@@ -1,4 +1,4 @@
-`timescale 1ps/1ps
+`timescale 1ns/1ps
 
 module tb_Prpg10;/*このモジュール名がsim実行結果のファイル名になる。*/
   reg clk, tx ;/*テストベンチ内で使用するレジスタを宣言する*/
@@ -19,8 +19,9 @@ module tb_Prpg10;/*このモジュール名がsim実行結果のファイル名�
   assign jb[3] = digit;
 
 
-  parameter STEP = 104160000; //104usec
-  parameter CYC = 1000;/*period 10ns=1u/100=100MHz*/
+  parameter STEP = 104160; //104usec
+  parameter MILLI = 1000000;//1milli sec
+  parameter CYC = 10;/*period 10ns=1u/100=100MHz*/
   always #(CYC/2) clk = ~clk;/*CYC/2が経過するたびにclkを反転*/
 
   seven_seg_disp disp ( /*sim対象のモジュールをdutという名前でインスタンス化*/
@@ -49,9 +50,10 @@ module tb_Prpg10;/*このモジュール名がsim実行結果のファイル名�
     #(STEP)   tx=1;   //ascii 5 6of8
     #(STEP)   tx=0;   //ascii 5 7of8
     #(STEP)   tx=0;   //ascii 5 8of8
+    #(STEP)   tx=1;   //
 
     // Stop simulation
-    #(STEP*5)   $finish;
+    #(MILLI*20)   $finish;
   end
   
 endmodule
